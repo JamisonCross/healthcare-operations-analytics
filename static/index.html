@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CareFlow | Synthetic Operations Study</title>
+    <link rel="stylesheet" href="/static/style.css" />
+      <link rel="icon" href="/static/icon.svg" />
+  </head>
+  <body>
+    <header class="topbar"><a class="brand" href="/">▥ <strong>CareFlow</strong><span>ANALYTICS STUDIO</span></a><nav><a href="#overview">Overview</a><a href="#operations">Capacity lab</a><a href="#explorer">Data explorer</a></nav><span class="cohort-tag">SYNTHETIC COHORT / 2025</span></header>
+    <main id="overview"><div class="page-heading"><div><div class="eyebrow">OPERATIONS INTELLIGENCE / STUDY 001</div><h1>See the pattern.<br><span>Understand the tradeoff.</span></h1><p class="subtitle">A reproducible journey from raw appointments to operational insight.</p></div><div class="study-meta">3,600 generated appointments<br>12 months · fixed seed 42<br><strong>Zero real patient records</strong></div></div>
+      <div class="notice">
+        Every record is generated. These findings demonstrate analysis, not real
+        healthcare outcomes. Predictions are for evaluating supportive
+        reminders—not clinical decisions.
+      </div>
+      <div id="error" class="error hidden" role="alert"></div>
+      <div class="stats">
+        <div class="stat">
+          Validated appointments<strong id="appointments">—</strong>
+        </div>
+        <div class="stat">No-show rate<strong id="no-shows">—</strong></div>
+        <div class="stat">Mean attended wait<strong id="wait">—</strong></div>
+      </div>
+      <div class="section-label">01 / OPERATIONAL OVERVIEW</div><div class="grid">
+        <section class="card">
+          <h2>No-shows by appointment type</h2>
+          <p class="muted">
+            No-shows ÷ all appointments of each type · Full synthetic year
+          </p>
+          <div id="types"></div>
+        </section>
+        <section class="card">
+          <h2>Wait time by provider</h2>
+          <p class="muted">
+            Average minutes among attended visits only · Full synthetic year
+          </p>
+          <div id="providers"></div>
+        </section>
+      </div>
+      <div class="card">
+        <h2>Three findings worth investigating</h2>
+        <div id="findings"></div>
+      </div>
+      <div class="grid">
+        <section class="card">
+          <h2>Data quality is part of the work.</h2>
+          <div id="quality"></div>
+          <p class="muted">
+            Invalid records are quarantined with a reason. Missing age groups
+            stay “Unknown.” A no-show has no recorded waiting time.
+          </p>
+        </section>
+        <section class="card">
+          <h2>A modest model, honestly evaluated.</h2>
+          <p class="muted">
+            Logistic regression compared with a training-prevalence baseline.
+            Train: Jan–Aug. Threshold selection: Sep–Oct. Untouched holdout:
+            Nov–Dec.
+          </p>
+          <div id="model"></div>
+          <p class="muted">
+            Threshold targets approximately 20% of validation visits for
+            reminder review. Precision and recall below use that same threshold
+            on the holdout.
+          </p>
+        </section>
+      </div>
+      <div class="section-label" id="operations">02 / CAPACITY &amp; MODEL LAB</div>
+      <section class="card capacity-card"><div><div class="eyebrow">THE OPERATING QUESTION</div><h2>If we can review only a fraction of visits,<br>which queue captures the most no-shows?</h2><p class="muted">Retrospective supportive-reminder review across the entire Nov–Dec holdout. This compares queues; it does not estimate prevented no-shows.</p></div><label for="capacity">Review capacity <select id="capacity"><option value="5">5% of visits</option><option value="10">10% of visits</option><option value="15">15% of visits</option><option value="20" selected>20% of visits</option><option value="25">25% of visits</option><option value="30">30% of visits</option><option value="40">40% of visits</option></select></label><div id="capacity-results" class="capacity-results" aria-live="polite"></div><p id="capacity-method" class="muted"></p></section>
+      <div class="grid"><section class="card"><div class="eyebrow">VALIDATION ONLY · SEP–OCT</div><h2>Precision &amp; recall by threshold</h2><div id="threshold-chart"></div><p id="threshold-note" class="muted"></p><details><summary>View threshold values</summary><div id="threshold-table" class="table-wrap"></div></details></section><section class="card"><div class="eyebrow">HOLDOUT ONLY · NOV–DEC</div><h2>Predicted-risk distribution</h2><div id="risk-chart"></div><p class="muted">Risk-bin counts show model output across all holdout visits. These synthetic probabilities are not clinically validated.</p></section></div>
+      <section class="card"><div class="eyebrow">MODEL INTERPRETATION</div><h2>What moves the model’s prediction?</h2><p class="muted">Signed logistic-regression coefficients. Numeric inputs use a one-standard-deviation change; category coefficients use one-hot coding. Magnitudes across these types are not directly comparable. Associations in generated data are not causal effects.</p><div id="feature-chart"></div></section>
+      <div class="section-label" id="explorer">03 / VALIDATED DATA EXPLORER</div><div class="card">
+        <h2>Explore the validated records</h2>
+        <p class="muted">
+          Filters update these cohort figures and the table. Charts above show
+          the full year.
+        </p>
+        <div class="row">
+          <div>
+            <label for="provider">Provider</label
+            ><select id="provider">
+              <option value="">All providers</option>
+            </select>
+          </div>
+          <div>
+            <label for="type">Appointment type</label
+            ><select id="type">
+              <option value="">All appointment types</option>
+            </select>
+          </div>
+        </div>
+        <p id="cohort"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Provider</th>
+                <th>Type</th>
+                <th>Age group</th>
+                <th>No-show</th>
+                <th>Wait (min)</th>
+              </tr>
+            </thead>
+            <tbody id="records"></tbody>
+          </table>
+        </div>
+        <p class="muted">
+          Latest 100 matching records shown. Cohort figures include all matching
+          records.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Model boundaries</h2>
+        <div id="limitations"></div>
+        <details>
+          <summary>Holdout results by age group</summary>
+          <div id="groups"></div>
+        </details>
+      </div>
+      <footer>
+        Python → validated CSV → SQLite → dashboard → chronological model
+        evaluation · <a href="/docs">API documentation</a>
+      </footer>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

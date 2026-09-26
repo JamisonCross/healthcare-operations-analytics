@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='utf-8'?>
+<workbook source-platform="mac" version="9.0" xmlns:user="http://www.tableausoftware.com/xml/user">
+  <preferences />
+  <style-theme name="clean" />
+  <datasources>
+    <datasource caption="Synthetic appointments" inline="true" name="textscan.careflow" version="9.0">
+      <connection class="textscan" directory="Data" filename="appointments_clean.csv" server="" password="">
+        <relation name="appointments_clean#csv" table="[appointments_clean#csv]" type="table">
+          <columns character-set="UTF-8" header="yes" locale="en_US" separator=",">
+            <column datatype="string" name="appointment_id" ordinal="0" />
+            <column datatype="string" name="appointment_date" ordinal="1" />
+            <column datatype="string" name="provider" ordinal="2" />
+            <column datatype="string" name="appointment_type" ordinal="3" />
+            <column datatype="string" name="age_group" ordinal="4" />
+            <column datatype="integer" name="lead_days" ordinal="5" />
+            <column datatype="integer" name="prior_no_shows" ordinal="6" />
+            <column datatype="integer" name="reminder_sent" ordinal="7" />
+            <column datatype="integer" name="appointment_hour" ordinal="8" />
+            <column datatype="integer" name="no_show" ordinal="9" />
+            <column datatype="real" name="wait_minutes" ordinal="10" />
+            <column datatype="string" name="outcome" ordinal="11" />
+          </columns>
+        </relation>
+      </connection>
+      <column caption="Appointment Id" datatype="string" name="[appointment_id]" role="dimension" type="nominal" />
+      <column caption="Appointment Date" datatype="string" name="[appointment_date]" role="dimension" type="nominal" />
+      <column caption="Provider" datatype="string" name="[provider]" role="dimension" type="nominal" />
+      <column caption="Appointment Type" datatype="string" name="[appointment_type]" role="dimension" type="nominal" />
+      <column caption="Age Group" datatype="string" name="[age_group]" role="dimension" type="nominal" />
+      <column caption="Lead Days" datatype="integer" name="[lead_days]" role="measure" type="quantitative" />
+      <column caption="Prior No Shows" datatype="integer" name="[prior_no_shows]" role="measure" type="quantitative" />
+      <column caption="Reminder Sent" datatype="integer" name="[reminder_sent]" role="measure" type="quantitative" />
+      <column caption="Appointment Hour" datatype="integer" name="[appointment_hour]" role="measure" type="quantitative" />
+      <column caption="No Show" datatype="integer" name="[no_show]" role="measure" type="quantitative" default-format="p0.00%" />
+      <column caption="Wait Minutes" datatype="real" name="[wait_minutes]" role="measure" type="quantitative" />
+      <column caption="Outcome" datatype="string" name="[outcome]" role="dimension" type="nominal" />
+    </datasource>
+  </datasources>
+  <worksheets>
+    <worksheet name="No-show rate by visit type">
+      <table>
+        <view>
+          <datasources>
+            <datasource caption="Synthetic appointments" name="textscan.careflow" />
+          </datasources>
+          <datasource-dependencies datasource="textscan.careflow">
+            <column caption="Appointment Type" datatype="string" name="[appointment_type]" role="dimension" type="nominal" />
+            <column caption="No Show" datatype="integer" name="[no_show]" role="measure" type="quantitative" default-format="p0.00%" />
+            <column-instance column="[appointment_type]" derivation="None" name="[none:appointment_type:nk]" pivot="key" type="nominal" />
+            <column-instance column="[no_show]" derivation="Avg" name="[avg:no_show:qk]" pivot="key" type="quantitative" />
+          </datasource-dependencies>
+          <aggregation value="true" />
+        </view>
+        <panes>
+          <pane>
+            <view>
+              <breakdown value="auto" />
+            </view>
+            <mark class="Bar" />
+            <encodings>
+              <text column="[textscan.careflow].[avg:no_show:qk]" />
+            </encodings>
+            <style>
+              <style-rule element="mark">
+                <format attr="mark-labels-show" value="true" />
+                <format attr="mark-color" value="#7466a2" />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[textscan.careflow].[none:appointment_type:nk]</rows>
+        <cols>[textscan.careflow].[avg:no_show:qk]</cols>
+      </table>
+    </worksheet>
+    <worksheet name="Attended wait by provider">
+      <table>
+        <view>
+          <datasources>
+            <datasource caption="Synthetic appointments" name="textscan.careflow" />
+          </datasources>
+          <datasource-dependencies datasource="textscan.careflow">
+            <column caption="Provider" datatype="string" name="[provider]" role="dimension" type="nominal" />
+            <column caption="Wait Minutes" datatype="real" name="[wait_minutes]" role="measure" type="quantitative" />
+            <column-instance column="[provider]" derivation="None" name="[none:provider:nk]" pivot="key" type="nominal" />
+            <column-instance column="[wait_minutes]" derivation="Avg" name="[avg:wait_minutes:qk]" pivot="key" type="quantitative" />
+          </datasource-dependencies>
+          <aggregation value="true" />
+        </view>
+        <panes>
+          <pane>
+            <view>
+              <breakdown value="auto" />
+            </view>
+            <mark class="Bar" />
+            <encodings>
+              <text column="[textscan.careflow].[avg:wait_minutes:qk]" />
+            </encodings>
+            <style>
+              <style-rule element="mark">
+                <format attr="mark-labels-show" value="true" />
+                <format attr="mark-color" value="#7466a2" />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[textscan.careflow].[none:provider:nk]</rows>
+        <cols>[textscan.careflow].[avg:wait_minutes:qk]</cols>
+      </table>
+    </worksheet>
+    <worksheet name="No-show rate by age group">
+      <table>
+        <view>
+          <datasources>
+            <datasource caption="Synthetic appointments" name="textscan.careflow" />
+          </datasources>
+          <datasource-dependencies datasource="textscan.careflow">
+            <column caption="Age Group" datatype="string" name="[age_group]" role="dimension" type="nominal" />
+            <column caption="No Show" datatype="integer" name="[no_show]" role="measure" type="quantitative" default-format="p0.00%" />
+            <column-instance column="[age_group]" derivation="None" name="[none:age_group:nk]" pivot="key" type="nominal" />
+            <column-instance column="[no_show]" derivation="Avg" name="[avg:no_show:qk]" pivot="key" type="quantitative" />
+          </datasource-dependencies>
+          <aggregation value="true" />
+        </view>
+        <panes>
+          <pane>
+            <view>
+              <breakdown value="auto" />
+            </view>
+            <mark class="Bar" />
+            <encodings>
+              <text column="[textscan.careflow].[avg:no_show:qk]" />
+            </encodings>
+            <style>
+              <style-rule element="mark">
+                <format attr="mark-labels-show" value="true" />
+                <format attr="mark-color" value="#7466a2" />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[textscan.careflow].[none:age_group:nk]</rows>
+        <cols>[textscan.careflow].[avg:no_show:qk]</cols>
+      </table>
+    </worksheet>
+  </worksheets>
+  <dashboards>
+    <dashboard name="Synthetic operations overview">
+      <style />
+      <size maxheight="780" maxwidth="960" minheight="780" minwidth="960" />
+      <zones>
+        <zone h="6500" id="4" type-v2="title" w="96000" x="2000" y="1000" />
+        <zone h="27000" id="1" name="No-show rate by visit type" show-title="true" w="96000" x="2000" y="9000">
+          <zone-style>
+            <format attr="border-color" value="#dddddd" />
+            <format attr="margin" value="12" />
+          </zone-style>
+        </zone>
+        <zone h="27000" id="2" name="Attended wait by provider" show-title="true" w="96000" x="2000" y="39000">
+          <zone-style>
+            <format attr="border-color" value="#dddddd" />
+            <format attr="margin" value="12" />
+          </zone-style>
+        </zone>
+        <zone h="27000" id="3" name="No-show rate by age group" show-title="true" w="96000" x="2000" y="69000">
+          <zone-style>
+            <format attr="border-color" value="#dddddd" />
+            <format attr="margin" value="12" />
+          </zone-style>
+        </zone>
+      </zones>
+    </dashboard>
+  </dashboards>
+  <windows>
+    <window class="worksheet" name="No-show rate by visit type">
+      <viewpoint value="fit-width" />
+    </window>
+    <window class="worksheet" name="Attended wait by provider">
+      <viewpoint value="fit-width" />
+    </window>
+    <window class="worksheet" name="No-show rate by age group">
+      <viewpoint value="fit-width" />
+    </window>
+    <window class="dashboard" name="Synthetic operations overview" />
+  </windows>
+</workbook>

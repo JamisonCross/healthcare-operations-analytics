@@ -1,0 +1,5 @@
+provider,appointments,attended,average_wait_minutes
+Provider C,880,760,21.84
+Provider B,884,753,11.86
+Provider A,904,764,11.81
+Provider D,929,784,11.71

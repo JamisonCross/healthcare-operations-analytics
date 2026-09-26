@@ -1,0 +1,14 @@
+appointment_id,appointment_date,provider,appointment_type,age_group,lead_days,prior_no_shows,reminder_sent,appointment_hour,no_show,wait_minutes,outcome,source_row,rejection_reason
+A00003,bad-date,Provider A,Follow-up,18–34,13,1,1,14,0,12.9,Completed,4,invalid date
+A00004,2025-12-21,Provider B,Behavioral health,50–64,2,0,1,16,0,-12.0,Completed,5,invalid attended wait time
+A00005,2025-01-28,Provider B,Primary care,50–64,-2,0,1,9,0,12.7,Completed,6,invalid lead_days
+A00011,2025-02-08,Provider A,Follow-up,65+,32,0,1,11,0,13.3,Completed,3602,duplicate appointment ID
+A00012,2025-02-25,Provider C,Primary care,18–34,29,0,1,10,0,22.0,Completed,3603,duplicate appointment ID
+A00013,2025-06-16,Provider B,Specialty,50–64,12,1,1,15,0,13.3,Completed,3604,duplicate appointment ID
+A00014,2025-04-10,Provider C,Primary care,65+,14,0,1,11,0,17.4,Completed,3605,duplicate appointment ID
+A00015,2025-04-23,Provider C,Follow-up,65+,5,0,1,14,0,29.2,Completed,3606,duplicate appointment ID
+A00016,2025-01-16,Provider A,Primary care,50–64,27,0,0,16,0,18.2,Completed,3607,duplicate appointment ID
+A00017,2025-02-25,Provider D,Behavioral health,50–64,22,0,1,15,0,10.1,Completed,3608,duplicate appointment ID
+A00018,2025-06-29,Provider D,Primary care,18–34,15,0,1,10,0,10.8,Completed,3609,duplicate appointment ID
+A00019,2025-04-21,Provider C,Primary care,50–64,30,0,1,14,0,29.9,Referred,3610,duplicate appointment ID
+A00020,2025-09-23,Provider A,Primary care,65+,2,0,1,10,0,5.5,Referred,3611,duplicate appointment ID
