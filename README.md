@@ -1,27 +1,12 @@
 # Healthcare Operations Analytics
 
-## Version 2: an operations analytics studio
-
-![CareFlow analytics studio](docs/screenshots/overview.jpg)
-
-- A dark BI layout with cyan operational charts, amber capacity figures, monospaced measures, and separate overview, capacity lab and data explorer sections.
-- Validation-only precision/recall curves, holdout risk-bin counts, signed feature coefficients, and an interactive capacity comparison. Accessible chart descriptions and a threshold-value table accompany the plots.
-- Fixed the report-without-database test bug: `create_app(data_dir=...)` supports a temporary dataset, and API tests generate their own database. A stale report alone still produces an explicit setup error rather than silently creating an empty database.
-- **8 automated tests passed** on Python 3.13. Ruff lint/format, JavaScript syntax, pipeline regeneration and Tableau package checks pass. Desktop/phone browser checks covered chart rendering, capacity selection and provider filtering.
-
-### A capacity-constrained operating question
-
-“If reviewers can inspect at most 20% of this holdout cohort, how many observed no-shows are in the highest-risk queue?”
-
-For seed 42, the holdout has **592** visits and **81** no-shows. A strict top-20% cap allocates **118** slots and captures **34** observed no-shows: **28.8% precision**, **42.0% recall**, and **2.11×** the random-selection expectation. Ties use appointment ID; ranking never uses the outcome label. Other capacity levels are labeled retrospective sensitivity analyses, not tuning of the model on holdout outcomes.
-
-This cap differs from the fixed probability threshold: the threshold was selected on validation data to target roughly 20%, then flags **16.6%** of holdout visits unchanged. The UI explains this difference. Capacity spans the full Nov–Dec cohort; it is not a daily staffing model or a forecast of prevented no-shows. No intervention was simulated.
-
-The coefficient display distinguishes standardized numeric effects from one-hot category coefficients; comparisons are descriptive, not causal or clinical.
-
 A reproducible study of synthetic appointment operations: generate messy records, validate them, query the clean data in SQL, explore a dashboard, and evaluate a basic no-show prediction model.
 
 The question is practical: where might an operations team investigate appointment attendance and waiting time? Every record is fictional. The study makes no claims about real patients, providers or healthcare outcomes.
+
+**Demo:** entirely synthetic appointment data, a Python/SQL pipeline, a browser dashboard, and a packaged Tableau workbook.
+
+![CareFlow analytics studio](docs/screenshots/overview.jpg)
 
 ## Run it
 
@@ -59,6 +44,16 @@ flowchart LR
 The generator creates 3,600 appointments in 2025, then adds ten duplicates and selected dirty values. Cleaning normalizes category labels, validates dates and ranges, checks outcomes, quarantines invalid rows with a source-row number and reason, and keeps missing ages as `Unknown`. Wait time is null for no-shows; it is never imputed as zero for operations reporting.
 
 The generator deliberately makes longer booking windows, previous missed visits and some appointment types associated with no-shows. These are simulated assumptions, not discoveries about healthcare.
+
+## Capacity planning
+
+“If reviewers can inspect at most 20% of this holdout cohort, how many observed no-shows are in the highest-risk queue?”
+
+For seed 42, the holdout has **592** visits and **81** no-shows. A strict top-20% cap allocates **118** slots and captures **34** observed no-shows: **28.8% precision**, **42.0% recall**, and **2.11×** the random-selection expectation. Ties use appointment ID; ranking never uses the outcome label. Other capacity levels are labeled retrospective sensitivity analyses, not tuning of the model on holdout outcomes.
+
+This cap differs from the fixed probability threshold: the threshold was selected on validation data to target roughly 20%, then flags **16.6%** of holdout visits unchanged. The UI explains this difference. Capacity spans the full Nov–Dec cohort; it is not a daily staffing model or a forecast of prevented no-shows. No intervention was simulated.
+
+The coefficient display distinguishes standardized numeric effects from one-hot category coefficients; comparisons are descriptive, not causal or clinical.
 
 ## Findings and evaluation
 
@@ -98,3 +93,7 @@ Tests verify reproducibility, quarantine reasons, outcome consistency, chronolog
 - `app.py` and `static/`: interactive dashboard and read-only API.
 
 The dashboard intentionally separates full-year descriptive analysis from held-out predictive evaluation. Filtering the record explorer updates its own cohort totals; it does not silently change the model's reported test set.
+
+## Project updates
+
+See [the changelog](docs/CHANGELOG.md) for interface and engineering updates.
